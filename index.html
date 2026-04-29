@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Skor Perhitungan Permainan </title>
+    <title>Skor Remi Pro | Hasil Akhir di Bawah Riwayat</title>
     <style>
         * {
             margin: 0;
@@ -15,31 +15,29 @@
         body {
             background: linear-gradient(135deg, #0c1320 0%, #070b12 100%);
             min-height: 100vh;
-            padding: 1.5rem;
+            padding: 1.2rem;
         }
 
         .app-container {
-            max-width: 1400px;
+            max-width: 1600px;
             margin: 0 auto;
         }
 
         /* Header */
         .header {
             text-align: center;
-            margin-bottom: 1.8rem;
+            margin-bottom: 1.5rem;
         }
         .header h1 {
-            font-size: 2.2rem;
+            font-size: 2rem;
             background: linear-gradient(145deg, #F7E5B5, #E7BC5E);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
-            letter-spacing: -0.5px;
         }
         .header p {
             color: #8da3b5;
-            font-size: 0.85rem;
-            margin-top: 4px;
+            font-size: 0.8rem;
         }
 
         /* Panel tambah pemain */
@@ -47,20 +45,20 @@
             background: rgba(25, 38, 48, 0.8);
             backdrop-filter: blur(10px);
             border-radius: 1.5rem;
-            padding: 1rem 1.5rem;
+            padding: 0.8rem 1.2rem;
             display: flex;
             flex-wrap: wrap;
-            gap: 0.8rem;
+            gap: 0.7rem;
             align-items: flex-end;
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
             border: 1px solid rgba(231, 188, 94, 0.4);
         }
         .input-field {
             flex: 2;
-            min-width: 160px;
+            min-width: 150px;
         }
         .input-field label {
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             text-transform: uppercase;
             color: #c9d9e8;
             font-weight: 600;
@@ -68,7 +66,7 @@
         .input-field input {
             background: #101b24;
             border: 1px solid #3e5568;
-            padding: 0.6rem 1rem;
+            padding: 0.5rem 0.8rem;
             border-radius: 1.5rem;
             width: 100%;
             color: white;
@@ -77,7 +75,7 @@
         .btn-primary {
             background: linear-gradient(100deg, #e5b853, #d49f3a);
             border: none;
-            padding: 0.6rem 1.4rem;
+            padding: 0.5rem 1.2rem;
             border-radius: 2rem;
             font-weight: bold;
             color: #1f2a33;
@@ -89,235 +87,317 @@
             background: #f0c468;
         }
 
-        /* Layout utama: kiri daftar pemain (styling card vertikal) & kanan riwayat */
-        .main-dashboard {
+        /* Layout pemain menggunakan flex wrap (horizontal) */
+        .players-horizontal {
             display: flex;
             flex-wrap: wrap;
-            gap: 1.8rem;
-        }
-        .players-section {
-            flex: 2.5;
-            min-width: 280px;
-        }
-        .history-section {
-            flex: 1.3;
-            min-width: 260px;
-            background: rgba(12, 22, 30, 0.7);
-            backdrop-filter: blur(8px);
-            border-radius: 1.5rem;
-            padding: 1rem;
-            border: 1px solid rgba(231, 188, 94, 0.3);
-            height: fit-content;
-            max-height: 80vh;
-            overflow-y: auto;
-        }
-        .history-section h3 {
-            color: #f5dfa5;
-            font-size: 1.2rem;
-            margin-bottom: 0.8rem;
-            border-left: 4px solid #e5b853;
-            padding-left: 12px;
-        }
-        .history-log {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-        .history-item {
-            background: #0f1a21;
-            border-radius: 1rem;
-            padding: 0.6rem 0.9rem;
-            font-size: 0.75rem;
-            border-left: 3px solid;
-        }
-        .history-time {
-            font-size: 0.6rem;
-            color: #90a9bc;
-            font-family: monospace;
-        }
-        .history-detail {
-            font-weight: 600;
-            margin-top: 4px;
-            color: #e9e2cf;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            justify-content: flex-start;
         }
 
-        /* GRID PEMAIN: Tampilan vertikal (nama di atas, nilai di bawah) */
-        .players-grid {
+        /* Kartu pemain */
+        .player-card {
+            background: rgba(22, 34, 44, 0.95);
+            backdrop-filter: blur(5px);
+            border-radius: 1.2rem;
+            padding: 0.8rem;
+            border: 1px solid rgba(229, 184, 83, 0.4);
+            transition: 0.2s;
+            width: 260px;
+            min-width: 240px;
+            flex-shrink: 0;
             display: flex;
             flex-direction: column;
-            gap: 1.2rem;
-        }
-        .player-card {
-            background: rgba(22, 34, 44, 0.9);
-            backdrop-filter: blur(5px);
-            border-radius: 1.5rem;
-            padding: 1rem 1.2rem;
-            border: 1px solid rgba(229, 184, 83, 0.35);
-            transition: 0.2s;
         }
         .player-card:hover {
             border-color: #e5b853;
             background: #1e2f3b;
+            transform: translateY(-3px);
         }
-        /* Bagian atas: nama & tombol aksi */
-        .player-top {
+
+        .player-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            flex-wrap: wrap;
-            margin-bottom: 0.8rem;
+            margin-bottom: 0.5rem;
+            gap: 6px;
         }
         .player-name {
-            font-size: 1.5rem;
+            font-size: 1.2rem;
             font-weight: 800;
             background: linear-gradient(120deg, #fff1dd, #fad68f);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 130px;
         }
-        .action-buttons {
+        .action-icons {
             display: flex;
-            gap: 8px;
+            gap: 5px;
         }
-        .delete-player, .reset-player {
+        .icon-btn {
             background: none;
             border: 1px solid;
-            padding: 4px 12px;
-            border-radius: 2rem;
-            font-size: 0.7rem;
+            padding: 3px 8px;
+            border-radius: 1.5rem;
+            font-size: 0.65rem;
             font-weight: 600;
             cursor: pointer;
             transition: 0.1s;
         }
-        .delete-player {
+        .icon-btn.delete {
             border-color: #ff9f7a;
             color: #ffbf9a;
         }
-        .reset-player {
+        .icon-btn.reset {
             border-color: #6c8faa;
             color: #c5def5;
         }
-        .delete-player:hover { background: #a1422e40; }
-        .reset-player:hover { background: #2c5f7a40; }
-
-        /* NILAI BESAR DI BAWAH NAMA (sesuai permintaan: nama di atas, nilai di bawah) */
-        .player-score-area {
-            text-align: center;
-            margin: 0.5rem 0 1rem 0;
-            background: #07121b;
-            border-radius: 1.8rem;
-            padding: 0.6rem;
-            box-shadow: inset 0 1px 3px #00000030, 0 2px 5px #00000030;
+        .icon-btn:hover {
+            background: #ffffff20;
         }
-        .player-score {
-            font-size: 2.8rem;
+
+        .score-main {
+            text-align: center;
+            background: #07121b;
+            border-radius: 1.2rem;
+            padding: 0.5rem;
+            margin: 0.5rem 0;
+        }
+        .score-value {
+            font-size: 2.2rem;
             font-weight: 800;
             font-family: 'JetBrains Mono', monospace;
             color: #fad974;
-            text-shadow: 0 2px 5px black;
-            letter-spacing: 2px;
+            line-height: 1;
         }
         .score-label {
-            font-size: 0.7rem;
+            font-size: 0.6rem;
             color: #93afc2;
-            letter-spacing: 1px;
         }
 
-        /* Tombol skor kelipatan 5 sampai 100 */
-        .score-buttons-section {
-            margin-top: 8px;
-        }
-        .button-row {
+        .quick-buttons {
             display: flex;
             flex-wrap: wrap;
-            gap: 6px;
-            margin-bottom: 8px;
-            align-items: center;
+            gap: 4px;
+            margin: 8px 0;
+            justify-content: center;
         }
-        .score-btn {
+        .q-btn {
             background: #1f3441;
             border: none;
-            padding: 5px 12px;
-            border-radius: 2rem;
+            padding: 4px 8px;
+            border-radius: 1.2rem;
             font-weight: 600;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             color: #eef4fa;
             cursor: pointer;
+            min-width: 42px;
             transition: 0.1s;
-            min-width: 55px;
         }
-        .score-btn.plus {
+        .q-btn.plus {
             background: #1f6a48;
         }
-        .score-btn.plus:hover {
+        .q-btn.plus:hover {
             background: #2c8c60;
         }
-        .score-btn.minus {
+        .q-btn.minus {
             background: #9e4232;
         }
-        .score-btn.minus:hover {
+        .q-btn.minus:hover {
             background: #bc5543;
         }
-        .custom-row {
+        .custom-control {
             display: flex;
-            gap: 8px;
-            margin-top: 8px;
-            align-items: center;
-            justify-content: flex-start;
+            gap: 4px;
+            margin: 6px 0;
         }
-        .custom-row input {
+        .custom-control input {
             background: #0c1821;
             border: 1px solid #5c7b94;
-            padding: 6px 12px;
-            border-radius: 2rem;
+            padding: 4px 8px;
+            border-radius: 1.2rem;
             color: white;
-            width: 120px;
+            width: 80px;
+            font-size: 0.7rem;
             text-align: center;
         }
         .small-btn {
             background: #385f7a;
             border: none;
-            padding: 6px 14px;
-            border-radius: 2rem;
+            padding: 4px 10px;
+            border-radius: 1.2rem;
             font-weight: bold;
+            font-size: 0.7rem;
             color: white;
             cursor: pointer;
         }
-        .tools-bottom {
-            margin-top: 20px;
+
+        /* Bagian hasil terakhir di dalam kartu (perubahan terakhir) */
+        .last-change-container {
+            margin-top: 8px;
+            padding-top: 6px;
+            border-top: 1px solid rgba(231, 188, 94, 0.3);
+            text-align: center;
+        }
+        .last-change-title {
+            font-size: 0.55rem;
+            text-transform: uppercase;
+            color: #7f9eb5;
+            letter-spacing: 0.5px;
+        }
+        .last-change-badge {
+            font-size: 0.9rem;
+            font-weight: 700;
+            font-family: monospace;
+            padding: 2px 6px;
+            border-radius: 1.2rem;
+            display: inline-block;
+            margin-top: 3px;
+        }
+        .last-change-badge.positive {
+            background: #1f6a4830;
+            color: #adee8e;
+            border: 1px solid #6fcb8a;
+        }
+        .last-change-badge.negative {
+            background: #9e423230;
+            color: #ffb48a;
+            border: 1px solid #e07a5f;
+        }
+        .last-change-badge.neutral {
+            background: #2a405030;
+            color: #bbccdd;
+        }
+
+        /* ============ BAGIAN RIWAYAT DAN HASIL AKHIR (DIGABUNG) ============ */
+        .history-final-section {
+            background: rgba(12, 22, 30, 0.7);
+            backdrop-filter: blur(8px);
+            border-radius: 1.2rem;
+            border: 1px solid rgba(231, 188, 94, 0.3);
+            overflow: hidden;
+            margin-top: 0.5rem;
+        }
+
+        /* Riwayat */
+        .history-container {
+            padding: 0.8rem;
+            border-bottom: 1px solid rgba(231, 188, 94, 0.2);
+            max-height: 320px;
+            overflow-y: auto;
+        }
+        .history-container h3 {
+            color: #f5dfa5;
+            font-size: 1rem;
+            margin-bottom: 0.6rem;
+            border-left: 3px solid #e5b853;
+            padding-left: 10px;
+        }
+        .history-log {
             display: flex;
-            gap: 12px;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .history-item {
+            background: #0f1a21;
+            border-radius: 0.8rem;
+            padding: 0.4rem 0.7rem;
+            font-size: 0.7rem;
+            border-left: 2px solid;
+        }
+        .history-time {
+            font-size: 0.55rem;
+            color: #90a9bc;
+        }
+        .empty-log {
+            color: #7f95aa;
+            text-align: center;
+            padding: 1rem;
+            font-size: 0.8rem;
+        }
+
+        /* HASIL AKHIR (Ringkasan Skor Semua Pemain) - di bawah riwayat */
+        .final-result-container {
+            padding: 0.8rem;
+            background: rgba(0, 0, 0, 0.3);
+        }
+        .final-result-container h3 {
+            color: #f5dfa5;
+            font-size: 1rem;
+            margin-bottom: 0.8rem;
+            border-left: 3px solid #e5b853;
+            padding-left: 10px;
+        }
+        .final-scores-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            justify-content: flex-start;
+            align-items: center;
+        }
+        .final-score-item {
+            background: #1a2a36;
+            border-radius: 2rem;
+            padding: 0.4rem 1rem;
+            display: inline-flex;
+            align-items: baseline;
+            gap: 8px;
+            border: 1px solid rgba(229, 184, 83, 0.4);
+            transition: 0.1s;
+        }
+        .final-player-name {
+            font-weight: 700;
+            color: #fad68f;
+            font-size: 0.85rem;
+        }
+        .final-player-score {
+            font-weight: 800;
+            font-family: monospace;
+            font-size: 1.1rem;
+            color: #f5e2b0;
+            background: #07121b;
+            padding: 2px 8px;
+            border-radius: 2rem;
+        }
+
+        .tools-bar {
+            display: flex;
+            gap: 10px;
+            margin-top: 1rem;
             flex-wrap: wrap;
             justify-content: space-between;
         }
         .btn-danger {
             background: #78281f;
-            padding: 8px 18px;
+            padding: 6px 16px;
             border: none;
             border-radius: 2rem;
             font-weight: bold;
             color: white;
             cursor: pointer;
+            font-size: 0.8rem;
         }
-        .clear-history-btn {
+        .clear-history {
             background: #2c4b5e;
             border: none;
             border-radius: 2rem;
-            padding: 5px 12px;
+            padding: 6px 12px;
             color: white;
             font-size: 0.7rem;
             cursor: pointer;
         }
-        .empty-log {
-            color: #7f95aa;
-            text-align: center;
-            padding: 20px;
-            font-style: italic;
-        }
-        @media (max-width: 750px) {
-            .player-score { font-size: 2rem; }
-            .score-btn { padding: 4px 8px; min-width: 45px; font-size: 0.7rem; }
-            .player-name { font-size: 1.2rem; }
+
+        @media (max-width: 800px) {
+            .player-card { width: 220px; min-width: 200px; }
+            .score-value { font-size: 1.8rem; }
+            .q-btn { padding: 3px 6px; min-width: 38px; font-size: 0.65rem; }
+            .final-score-item { padding: 0.3rem 0.8rem; }
+            .final-player-score { font-size: 0.9rem; }
         }
     </style>
 </head>
@@ -325,88 +405,94 @@
 <div class="app-container">
     <div class="header">
         <h1>🃏 SKOR REMI PRO 🃏</h1>
-        <p>+5 s/d +100 & minus setara | Nama di atas — Nilai di bawah | Riwayat perubahan</p>
+        <p>+5 s/d +100 & minus | Hasil Akhir (Nama + Skor) di Bawah Riwayat</p>
     </div>
 
     <div class="add-panel">
         <div class="input-field">
             <label>NAMA PEMAIN</label>
-            <input type="text" id="newPlayerName" placeholder="Contoh: Luffy, Zoro, Nami" autocomplete="off">
+            <input type="text" id="newPlayerName" placeholder="Contoh: Luffy, Zoro" autocomplete="off">
         </div>
         <div class="input-field">
-            <label>SKOR AWAL (boleh minus)</label>
+            <label>SKOR AWAL</label>
             <input type="number" id="initialScore" value="0" step="5">
         </div>
-        <button class="btn-primary" id="addPlayerBtn">➕ TAMBAH PEMAIN</button>
-        <button class="btn-primary" id="sampleBtn" style="background:#3a5f7c;">♠️ Contoh Pemain</button>
+        <button class="btn-primary" id="addPlayerBtn">➕ Tambah</button>
+        <button class="btn-primary" id="sampleBtn" style="background:#3a5f7c;">♠️ Contoh</button>
     </div>
 
-    <div class="main-dashboard">
-        <!-- KIRI: Daftar pemain dengan tampilan vertikal (nama di atas, nilai di bawah) -->
-        <div class="players-section">
-            <div id="playersGrid" class="players-grid"></div>
-            <div class="tools-bottom">
-                <button class="btn-danger" id="resetAllBtn">🗑️ Reset SEMUA Pemain & Skor</button>
-                <button class="btn-primary" id="clearAllHistoryBtn" style="background:#3f5c6e;">📜 Hapus Semua Riwayat</button>
+    <!-- Daftar Pemain (Horizontal) dengan kontrol skor -->
+    <div id="playersContainer" class="players-horizontal"></div>
+
+    <!-- SECTION Gabungan: RIWAYAT + HASIL AKHIR (di bawah riwayat) -->
+    <div class="history-final-section">
+        <!-- Bagian Riwayat -->
+        <div class="history-container">
+            <h3>📋 RIWAYAT SKOR</h3>
+            <div id="historyLogContainer" class="history-log">
+                <div class="empty-log">✨ Belum ada aktivitas.</div>
             </div>
         </div>
 
-        <!-- KANAN: Panel riwayat -->
-        <div class="history-section">
-            <h3>📋 RIWAYAT SKOR</h3>
-            <div id="historyLogContainer" class="history-log">
-                <div class="empty-log">✨ Belum ada aktivitas. Ubah skor pemain untuk mencatat riwayat.</div>
+        <!-- Bagian HASIL AKHIR (hanya NAMA + SKOR terakhir) di bawah riwayat -->
+        <div class="final-result-container">
+            <h3>🏆 HASIL AKHIR (SKOR TERKINI)</h3>
+            <div id="finalScoresContainer" class="final-scores-grid">
+                <!-- Akan diisi dynamic: nama dan skor semua pemain -->
+                <div class="empty-log" style="padding:0.5rem;">Belum ada pemain</div>
             </div>
         </div>
+    </div>
+
+    <div class="tools-bar">
+        <button class="btn-danger" id="resetAllBtn">🗑️ Reset Semua Pemain</button>
+        <button class="clear-history" id="clearHistoryBtn">📜 Hapus Riwayat</button>
     </div>
 </div>
 
 <script>
-    // ======================= DATA =======================
-    let players = [];       // { id, name, score }
+    // ================= DATA =================
+    let players = [];       // { id, name, score, lastDelta }
     let globalHistory = []; // { playerName, delta, newScore, timestamp }
 
-    // Helper ID
     function generateId() {
         return Date.now() + '-' + Math.random().toString(36).substr(2, 8);
     }
 
-    // Simpan ke localStorage
     function saveToLocalStorage() {
-        const dataToStore = { players, history: globalHistory };
-        localStorage.setItem('remi_pro_vertical', JSON.stringify(dataToStore));
+        const data = { players, history: globalHistory };
+        localStorage.setItem('remi_final_bawah', JSON.stringify(data));
     }
 
     function loadFromLocalStorage() {
-        const saved = localStorage.getItem('remi_pro_vertical');
+        const saved = localStorage.getItem('remi_final_bawah');
         if (saved) {
             try {
                 const parsed = JSON.parse(saved);
                 if (parsed.players && Array.isArray(parsed.players)) {
                     players = parsed.players;
-                    players.forEach(p => { if (!p.id) p.id = generateId(); });
+                    players.forEach(p => {
+                        if (!p.id) p.id = generateId();
+                        if (p.lastDelta === undefined) p.lastDelta = 0;
+                    });
                 }
-                if (parsed.history && Array.isArray(parsed.history)) {
-                    globalHistory = parsed.history;
-                } else globalHistory = [];
-            } catch(e) { console.warn(e); }
+                if (parsed.history && Array.isArray(parsed.history)) globalHistory = parsed.history;
+                else globalHistory = [];
+            } catch(e) {}
         }
-        if(!players) players = [];
-        if(!globalHistory) globalHistory = [];
+        if (!players) players = [];
+        players.forEach(p => { if (p.lastDelta === undefined) p.lastDelta = 0; });
     }
 
-    // Tambah riwayat
-    function addHistory(playerId, playerName, delta, newScore) {
-        const timestamp = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute:'2-digit', second:'2-digit' });
-        globalHistory.unshift({
-            playerName: playerName,
-            delta: delta,
-            newScore: newScore,
-            timestamp: timestamp,
-        });
-        if(globalHistory.length > 150) globalHistory.pop();
+    function addHistoryAndUpdateDelta(playerId, playerName, delta, newScore) {
+        const timestamp = new Date().toLocaleTimeString('id-ID', { hour:'2-digit', minute:'2-digit', second:'2-digit' });
+        globalHistory.unshift({ playerName, delta, newScore, timestamp });
+        if (globalHistory.length > 150) globalHistory.pop();
+        const idx = players.findIndex(p => p.id === playerId);
+        if (idx !== -1) players[idx].lastDelta = delta;
         saveToLocalStorage();
         renderHistoryPanel();
+        renderFinalScores();   // update hasil akhir setiap ada perubahan skor
     }
 
     function renderHistoryPanel() {
@@ -417,239 +503,259 @@
             return;
         }
         container.innerHTML = '';
-        for (let log of globalHistory.slice(0, 55)) {
+        for (let log of globalHistory.slice(0, 40)) {
             const div = document.createElement('div');
             div.className = 'history-item';
             const isPositive = log.delta >= 0;
             div.style.borderLeftColor = isPositive ? '#7bc46e' : '#f1956b';
             div.innerHTML = `
                 <div class="history-time">🕒 ${log.timestamp}</div>
-                <div class="history-detail">
-                    <strong>${escapeHtml(log.playerName)}</strong> 
-                    <span class="${isPositive ? 'badge-plus' : 'badge-minus'}" style="${isPositive ? 'color:#b3f0a0' : 'color:#ffb48a'}">${log.delta >= 0 ? '+' : ''}${log.delta}</span>
-                    → skor <strong>${log.newScore}</strong>
-                </div>
+                <div><strong>${escapeHtml(log.playerName)}</strong> <span style="color:${isPositive ? '#b3f0a0' : '#ffb48a'}">${log.delta >= 0 ? '+' : ''}${log.delta}</span> → ${log.newScore}</div>
             `;
             container.appendChild(div);
         }
-        if(globalHistory.length > 55) {
+        if (globalHistory.length > 40) {
             const more = document.createElement('div');
             more.style.textAlign = 'center';
-            more.style.fontSize = '0.7rem';
+            more.style.fontSize = '0.65rem';
             more.style.color = '#99aabb';
-            more.innerText = `+ ${globalHistory.length - 55} riwayat lainnya`;
+            more.innerText = `+ ${globalHistory.length - 40} riwayat lainnya`;
             container.appendChild(more);
         }
     }
 
-    // Core: update skor dengan log
-    function updatePlayerScore(playerId, deltaValue) {
-        const idx = players.findIndex(p => p.id === playerId);
-        if(idx === -1) return false;
-        const oldScore = players[idx].score;
-        const newScore = oldScore + deltaValue;
-        players[idx].score = newScore;
-        addHistory(playerId, players[idx].name, deltaValue, newScore);
-        renderPlayersGrid();
-        saveToLocalStorage();
-        return true;
+    // Render HASIL AKHIR (nama + skor semua pemain) di bawah riwayat
+    function renderFinalScores() {
+        const container = document.getElementById('finalScoresContainer');
+        if (!container) return;
+        if (players.length === 0) {
+            container.innerHTML = `<div class="empty-log" style="padding:0.5rem;">Belum ada pemain</div>`;
+            return;
+        }
+        container.innerHTML = '';
+        // Urutkan berdasarkan nama atau skor? biarkan urutan pemain existing
+        players.forEach(player => {
+            const scoreItem = document.createElement('div');
+            scoreItem.className = 'final-score-item';
+            scoreItem.innerHTML = `
+                <span class="final-player-name">${escapeHtml(player.name)}</span>
+                <span class="final-player-score">${player.score}</span>
+            `;
+            container.appendChild(scoreItem);
+        });
     }
 
-    // Reset skor pemain ke 0
+    function updatePlayerScore(playerId, deltaValue) {
+        const idx = players.findIndex(p => p.id === playerId);
+        if (idx === -1) return;
+        const newScore = players[idx].score + deltaValue;
+        players[idx].score = newScore;
+        addHistoryAndUpdateDelta(playerId, players[idx].name, deltaValue, newScore);
+        renderPlayersGrid(); // refresh kartu (last change update)
+    }
+
     function resetPlayerScoreToZero(playerId) {
         const idx = players.findIndex(p => p.id === playerId);
-        if(idx === -1) return;
+        if (idx === -1) return;
         const oldScore = players[idx].score;
         const delta = -oldScore;
         players[idx].score = 0;
-        addHistory(playerId, players[idx].name, delta, 0);
+        addHistoryAndUpdateDelta(playerId, players[idx].name, delta, 0);
         renderPlayersGrid();
-        saveToLocalStorage();
     }
 
-    // Hapus pemain
     function deletePlayerById(playerId) {
         const player = players.find(p => p.id === playerId);
-        if(!player) return;
-        if(confirm(`Hapus pemain "${player.name}"?`)) {
+        if (!player) return;
+        if (confirm(`Hapus pemain "${player.name}"?`)) {
             players = players.filter(p => p.id !== playerId);
             renderPlayersGrid();
+            renderFinalScores();   // update hasil akhir setelah hapus
             saveToLocalStorage();
         }
     }
 
-    // Tambah pemain
     function addPlayer(name, initialScore) {
-        const trimName = name.trim();
-        if(trimName === "") {
-            alert("Nama pemain tidak boleh kosong!");
-            return false;
-        }
+        const trimmed = name.trim();
+        if (trimmed === "") { alert("Nama tidak boleh kosong!"); return false; }
         const newId = generateId();
         const newPlayer = {
             id: newId,
-            name: trimName,
-            score: Number(initialScore) || 0
+            name: trimmed,
+            score: Number(initialScore) || 0,
+            lastDelta: 0
         };
         players.push(newPlayer);
-        if(newPlayer.score !== 0) {
-            addHistory(newId, trimName, newPlayer.score, newPlayer.score);
+        if (newPlayer.score !== 0) {
+            addHistoryAndUpdateDelta(newId, trimmed, newPlayer.score, newPlayer.score);
+        } else {
+            // tetap render ulang
+            renderPlayersGrid();
+            renderFinalScores();
+            saveToLocalStorage();
         }
         renderPlayersGrid();
+        renderFinalScores();
         saveToLocalStorage();
         return true;
     }
 
-    // reset semua pemain & history
     function resetAllPlayersAndHistory() {
-        if(players.length === 0 && globalHistory.length === 0) return;
-        if(confirm("⚠️ Hapus SEMUA pemain dan seluruh riwayat skor? Tindakan permanen!")) {
+        if (players.length === 0 && globalHistory.length === 0) return;
+        if (confirm("⚠️ Hapus SEMUA pemain & seluruh riwayat?")) {
             players = [];
             globalHistory = [];
             saveToLocalStorage();
             renderPlayersGrid();
             renderHistoryPanel();
+            renderFinalScores();
         }
     }
 
     function clearHistoryOnly() {
-        if(globalHistory.length === 0) return;
-        if(confirm("Hapus semua catatan riwayat? Skor pemain tetap ada.")) {
+        if (globalHistory.length === 0) return;
+        if (confirm("Hapus semua riwayat? Skor pemain tetap ada.")) {
             globalHistory = [];
             saveToLocalStorage();
             renderHistoryPanel();
         }
     }
 
-    // Generate kelipatan 5 s/d 100
+    // Kelipatan 5 s/d 100
     const quickValues = [];
-    for(let i=5; i<=100; i+=5) quickValues.push(i);
+    for (let i = 5; i <= 100; i += 5) quickValues.push(i);
 
-    // Fungsi render dengan tampilan VERTIKAL (Nama di atas, nilai di bawah)
+    // Render semua kartu pemain (horizontal)
     function renderPlayersGrid() {
-        const container = document.getElementById('playersGrid');
-        if(!container) return;
-        if(players.length === 0) {
-            container.innerHTML = `<div style="background:rgba(0,0,0,0.3); border-radius:2rem; padding:2rem; text-align:center; color:#b0c4de;">🎴 Belum ada pemain. Tambahkan pemain untuk mulai bermain remi.</div>`;
+        const container = document.getElementById('playersContainer');
+        if (!container) return;
+        if (players.length === 0) {
+            container.innerHTML = `<div style="background:rgba(0,0,0,0.3); border-radius:1.5rem; padding:2rem; text-align:center; color:#b0c4de; width:100%;">🎴 Belum ada pemain. Tambahkan pemain untuk mulai bermain remi.</div>`;
             return;
         }
 
         container.innerHTML = '';
-        for(let player of players) {
+        for (let player of players) {
             const card = document.createElement('div');
             card.className = 'player-card';
 
-            // Bagian atas: nama dan tombol aksi
-            const topDiv = document.createElement('div');
-            topDiv.className = 'player-top';
-            topDiv.innerHTML = `
-                <span class="player-name">${escapeHtml(player.name)}</span>
-                <div class="action-buttons">
-                    <button class="delete-player" data-id="${player.id}" data-action="delete">🗑️ Hapus</button>
-                    <button class="reset-player" data-id="${player.id}" data-action="resetZero">↺ Reset ke 0</button>
+            // Header: Nama + tombol hapus/reset
+            const header = document.createElement('div');
+            header.className = 'player-header';
+            header.innerHTML = `
+                <span class="player-name" title="${escapeHtml(player.name)}">${escapeHtml(player.name)}</span>
+                <div class="action-icons">
+                    <button class="icon-btn delete" data-id="${player.id}">🗑️</button>
+                    <button class="icon-btn reset" data-id="${player.id}">↺0</button>
                 </div>
             `;
 
-            // Area nilai di bawah nama (sesuai permintaan)
+            // Area skor utama
             const scoreArea = document.createElement('div');
-            scoreArea.className = 'player-score-area';
+            scoreArea.className = 'score-main';
             scoreArea.innerHTML = `
-                <div class="player-score">${player.score}</div>
+                <div class="score-value">${player.score}</div>
                 <div class="score-label">SKOR</div>
             `;
 
-            // Tombol skor + dan - (berjejer, kelipatan 5 sampai 100)
-            const buttonsContainer = document.createElement('div');
-            buttonsContainer.className = 'score-buttons-section';
-
-            // Baris tombol plus
-            const plusRow = document.createElement('div');
-            plusRow.className = 'button-row';
-            const plusSign = document.createElement('span');
-            plusSign.innerText = '➕ ';
-            plusSign.style.fontWeight = 'bold';
-            plusSign.style.color = '#b9e6a2';
-            plusRow.appendChild(plusSign);
+            // Tombol cepat + dan -
+            const plusContainer = document.createElement('div');
+            plusContainer.className = 'quick-buttons';
+            const minusContainer = document.createElement('div');
+            minusContainer.className = 'quick-buttons';
+            
             quickValues.forEach(val => {
                 const btn = document.createElement('button');
                 btn.innerText = `+${val}`;
-                btn.className = 'score-btn plus';
+                btn.className = 'q-btn plus';
                 btn.addEventListener('click', (e) => {
                     e.stopPropagation();
                     updatePlayerScore(player.id, val);
                 });
-                plusRow.appendChild(btn);
+                plusContainer.appendChild(btn);
             });
-
-            // Baris tombol minus
-            const minusRow = document.createElement('div');
-            minusRow.className = 'button-row';
-            const minusSign = document.createElement('span');
-            minusSign.innerText = '➖ ';
-            minusSign.style.fontWeight = 'bold';
-            minusSign.style.color = '#f0a68a';
-            minusRow.appendChild(minusSign);
+            
             quickValues.forEach(val => {
                 const btn = document.createElement('button');
                 btn.innerText = `-${val}`;
-                btn.className = 'score-btn minus';
+                btn.className = 'q-btn minus';
                 btn.addEventListener('click', (e) => {
                     e.stopPropagation();
                     updatePlayerScore(player.id, -val);
                 });
-                minusRow.appendChild(btn);
+                minusContainer.appendChild(btn);
             });
 
             // Custom input
             const customDiv = document.createElement('div');
-            customDiv.className = 'custom-row';
+            customDiv.className = 'custom-control';
             const customInput = document.createElement('input');
             customInput.type = 'number';
-            customInput.placeholder = 'Nilai custom (+/-)';
+            customInput.placeholder = 'custom';
             customInput.value = '0';
             customInput.step = '5';
             const customBtn = document.createElement('button');
-            customBtn.innerText = 'Ubah Skor';
+            customBtn.innerText = 'Ubah';
             customBtn.className = 'small-btn';
             customBtn.addEventListener('click', () => {
-                let raw = customInput.value;
-                let num = Number(raw);
-                if(isNaN(num)) num = 0;
-                if(num !== 0) {
-                    updatePlayerScore(player.id, num);
+                let val = Number(customInput.value);
+                if (isNaN(val)) val = 0;
+                if (val !== 0) {
+                    updatePlayerScore(player.id, val);
                     customInput.value = '0';
                 } else {
-                    alert("Masukkan nilai bukan 0 (contoh: 25, -15, 50)");
+                    alert("Masukkan nilai bukan 0 (cth: 25, -15)");
                 }
             });
             customDiv.appendChild(customInput);
             customDiv.appendChild(customBtn);
 
-            buttonsContainer.appendChild(plusRow);
-            buttonsContainer.appendChild(minusRow);
-            buttonsContainer.appendChild(customDiv);
+            // Perubahan terakhir (last delta)
+            const lastDelta = player.lastDelta !== undefined ? player.lastDelta : 0;
+            let deltaDisplay = '';
+            let deltaClass = 'neutral';
+            if (lastDelta > 0) {
+                deltaDisplay = `+${lastDelta}`;
+                deltaClass = 'positive';
+            } else if (lastDelta < 0) {
+                deltaDisplay = `${lastDelta}`;
+                deltaClass = 'negative';
+            } else {
+                deltaDisplay = '0 (belum ada)';
+                deltaClass = 'neutral';
+            }
+            
+            const lastChangeDiv = document.createElement('div');
+            lastChangeDiv.className = 'last-change-container';
+            lastChangeDiv.innerHTML = `
+                <div class="last-change-title">📊 PERUBAHAN TERAKHIR</div>
+                <div class="last-change-badge ${deltaClass}">${deltaDisplay}</div>
+            `;
 
-            card.appendChild(topDiv);
-            card.appendChild(scoreArea);      // NILAI DI BAWAH (seperti yang diminta)
-            card.appendChild(buttonsContainer);
+            card.appendChild(header);
+            card.appendChild(scoreArea);
+            card.appendChild(plusContainer);
+            card.appendChild(minusContainer);
+            card.appendChild(customDiv);
+            card.appendChild(lastChangeDiv);
             container.appendChild(card);
         }
 
-        // Event listeners untuk tombol hapus & reset (karena dibuat dinamis)
-        document.querySelectorAll('.delete-player').forEach(btn => {
+        // Event untuk tombol hapus & reset
+        document.querySelectorAll('.icon-btn.delete').forEach(btn => {
             btn.removeEventListener('click', window._delHandler);
             const handler = (e) => {
                 const id = btn.getAttribute('data-id');
-                if(id) deletePlayerById(id);
+                if (id) deletePlayerById(id);
             };
             btn.addEventListener('click', handler);
             btn._delHandler = handler;
         });
-        document.querySelectorAll('.reset-player').forEach(btn => {
+        document.querySelectorAll('.icon-btn.reset').forEach(btn => {
             btn.removeEventListener('click', window._resetHandler);
             const handler = (e) => {
                 const id = btn.getAttribute('data-id');
-                if(id) resetPlayerScoreToZero(id);
+                if (id) resetPlayerScoreToZero(id);
             };
             btn.addEventListener('click', handler);
             btn._resetHandler = handler;
@@ -657,28 +763,30 @@
     }
 
     function escapeHtml(str) {
-        if(!str) return '';
+        if (!str) return '';
         return str.replace(/[&<>]/g, function(m) {
-            if(m === '&') return '&amp;';
-            if(m === '<') return '&lt;';
-            if(m === '>') return '&gt;';
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
             return m;
         });
     }
 
-    // Sample pemain (3 pemain default)
     function loadSamplePlayers() {
-        if(players.length > 0 && !confirm("Tambah 3 pemain contoh? Data saat ini akan ditambah (tidak dihapus).")) return;
-        const sampleNames = ["Yami Yugi", "Seto Kaiba", "Joey Wheeler"];
+        if (players.length > 0 && !confirm("Tambah 3 pemain contoh? Data akan ditambahkan (tidak dihapus).")) return;
+        const samples = ["Monkey D. Luffy", "Roronoa Zoro", "Nami"];
         let added = 0;
-        for(let name of sampleNames) {
-            if(!players.some(p => p.name.toLowerCase() === name.toLowerCase())) {
+        for (let name of samples) {
+            if (!players.some(p => p.name.toLowerCase() === name.toLowerCase())) {
                 addPlayer(name, 0);
                 added++;
             }
         }
-        if(added === 0) alert("Nama contoh sudah ada semua!");
-        else renderPlayersGrid();
+        if (added === 0) alert("Nama contoh sudah ada semua!");
+        else {
+            renderPlayersGrid();
+            renderFinalScores();
+        }
     }
 
     // Inisialisasi
@@ -686,23 +794,23 @@
         loadFromLocalStorage();
         renderPlayersGrid();
         renderHistoryPanel();
+        renderFinalScores();
 
-        const addBtn = document.getElementById('addPlayerBtn');
-        const nameField = document.getElementById('newPlayerName');
-        const initScoreField = document.getElementById('initialScore');
-        addBtn.addEventListener('click', () => {
-            let init = parseInt(initScoreField.value, 10);
-            if(isNaN(init)) init = 0;
-            if(addPlayer(nameField.value, init)) {
-                nameField.value = '';
-                initScoreField.value = '0';
-                nameField.focus();
+        document.getElementById('addPlayerBtn').addEventListener('click', () => {
+            const name = document.getElementById('newPlayerName').value;
+            let init = parseInt(document.getElementById('initialScore').value, 10);
+            if (isNaN(init)) init = 0;
+            if (addPlayer(name, init)) {
+                document.getElementById('newPlayerName').value = '';
+                document.getElementById('initialScore').value = '0';
             }
         });
-        document.getElementById('sampleBtn')?.addEventListener('click', loadSamplePlayers);
-        document.getElementById('resetAllBtn')?.addEventListener('click', resetAllPlayersAndHistory);
-        document.getElementById('clearAllHistoryBtn')?.addEventListener('click', clearHistoryOnly);
-        nameField.addEventListener('keypress', (e) => { if(e.key === 'Enter') addBtn.click(); });
+        document.getElementById('sampleBtn').addEventListener('click', loadSamplePlayers);
+        document.getElementById('resetAllBtn').addEventListener('click', resetAllPlayersAndHistory);
+        document.getElementById('clearHistoryBtn').addEventListener('click', clearHistoryOnly);
+        document.getElementById('newPlayerName').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') document.getElementById('addPlayerBtn').click();
+        });
     });
 </script>
 </body>
