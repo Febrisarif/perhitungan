@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Skor Remi Pro | Hasil Akhir di Bawah Riwayat</title>
+    <title>Skor Remi Pro | Statistik Kekalahan & Warna Khusus</title>
     <style>
         * {
             margin: 0;
@@ -23,7 +23,6 @@
             margin: 0 auto;
         }
 
-        /* Header */
         .header {
             text-align: center;
             margin-bottom: 1.5rem;
@@ -40,7 +39,6 @@
             font-size: 0.8rem;
         }
 
-        /* Panel tambah pemain */
         .add-panel {
             background: rgba(25, 38, 48, 0.8);
             backdrop-filter: blur(10px);
@@ -87,7 +85,6 @@
             background: #f0c468;
         }
 
-        /* Layout pemain menggunakan flex wrap (horizontal) */
         .players-horizontal {
             display: flex;
             flex-wrap: wrap;
@@ -96,7 +93,6 @@
             justify-content: flex-start;
         }
 
-        /* Kartu pemain */
         .player-card {
             background: rgba(22, 34, 44, 0.95);
             backdrop-filter: blur(5px);
@@ -104,8 +100,8 @@
             padding: 0.8rem;
             border: 1px solid rgba(229, 184, 83, 0.4);
             transition: 0.2s;
-            width: 260px;
-            min-width: 240px;
+            width: 300px;
+            min-width: 280px;
             flex-shrink: 0;
             display: flex;
             flex-direction: column;
@@ -196,21 +192,34 @@
             font-size: 0.7rem;
             color: #eef4fa;
             cursor: pointer;
-            min-width: 42px;
+            min-width: 45px;
             transition: 0.1s;
         }
         .q-btn.plus {
             background: #1f6a48;
+            color: #c8ffb0;
         }
         .q-btn.plus:hover {
             background: #2c8c60;
         }
         .q-btn.minus {
             background: #9e4232;
+            color: #ffcfb5;
         }
         .q-btn.minus:hover {
             background: #bc5543;
         }
+        /* WARNA KUNING KHUSUS UNTUK +35, -35, +85, -85 */
+        .q-btn.special-plus, .q-btn.special-minus {
+            background: #d4a017;
+            color: #fff5cc;
+            border: 1px solid #ffdd77;
+            box-shadow: 0 0 4px rgba(255,200,0,0.5);
+        }
+        .q-btn.special-plus:hover, .q-btn.special-minus:hover {
+            background: #f0b820;
+        }
+
         .custom-control {
             display: flex;
             gap: 4px;
@@ -237,11 +246,67 @@
             cursor: pointer;
         }
 
-        /* Bagian hasil terakhir di dalam kartu (perubahan terakhir) */
-        .last-change-container {
+        /* Statistik Kekalahan */
+        .stats-container {
             margin-top: 8px;
             padding-top: 6px;
             border-top: 1px solid rgba(231, 188, 94, 0.3);
+            text-align: center;
+        }
+        .stats-title {
+            font-size: 0.55rem;
+            text-transform: uppercase;
+            color: #7f9eb5;
+            letter-spacing: 0.5px;
+        }
+        .stats-badge {
+            font-size: 0.8rem;
+            font-weight: 700;
+            font-family: monospace;
+            padding: 2px 6px;
+            border-radius: 1.2rem;
+            display: inline-block;
+            margin-top: 3px;
+            background: #2a2a3a;
+            color: #ffaa88;
+        }
+        .loss-count {
+            background: #5a1a1a;
+            color: #ffaaaa;
+            margin-left: 5px;
+            padding: 2px 8px;
+            border-radius: 1rem;
+            font-size: 0.7rem;
+        }
+
+        .record-container {
+            margin-top: 6px;
+            padding-top: 4px;
+            border-top: 1px solid rgba(231, 188, 94, 0.2);
+            text-align: center;
+        }
+        .record-title {
+            font-size: 0.55rem;
+            text-transform: uppercase;
+            color: #7f9eb5;
+            letter-spacing: 0.5px;
+        }
+        .record-badge {
+            font-size: 0.85rem;
+            font-weight: 700;
+            font-family: monospace;
+            padding: 2px 6px;
+            border-radius: 1.2rem;
+            display: inline-block;
+            margin-top: 3px;
+            background: #2a2a3a;
+            color: #ffaa88;
+        }
+
+        .last-change-container {
+            margin-top: 6px;
+            padding-top: 6px;
+            border-top: 1px solid rgba(231, 188, 94, 0.2);
             text-align: center;
         }
         .last-change-title {
@@ -251,7 +316,7 @@
             letter-spacing: 0.5px;
         }
         .last-change-badge {
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             font-weight: 700;
             font-family: monospace;
             padding: 2px 6px;
@@ -274,7 +339,6 @@
             color: #bbccdd;
         }
 
-        /* ============ BAGIAN RIWAYAT DAN HASIL AKHIR (DIGABUNG) ============ */
         .history-final-section {
             background: rgba(12, 22, 30, 0.7);
             backdrop-filter: blur(8px);
@@ -284,7 +348,6 @@
             margin-top: 0.5rem;
         }
 
-        /* Riwayat */
         .history-container {
             padding: 0.8rem;
             border-bottom: 1px solid rgba(231, 188, 94, 0.2);
@@ -321,7 +384,6 @@
             font-size: 0.8rem;
         }
 
-        /* HASIL AKHIR (Ringkasan Skor Semua Pemain) - di bawah riwayat */
         .final-result-container {
             padding: 0.8rem;
             background: rgba(0, 0, 0, 0.3);
@@ -359,10 +421,19 @@
             font-weight: 800;
             font-family: monospace;
             font-size: 1.1rem;
-            color: #f5e2b0;
             background: #07121b;
             padding: 2px 8px;
             border-radius: 2rem;
+        }
+        .final-player-score.min-score {
+            color: #ff6666;
+            background: #2a0c0c;
+            border: 1px solid #ff8888;
+        }
+        .final-player-score:not(.min-score) {
+            color: #6fda6f;
+            background: #0a2a0a;
+            border: 1px solid #5fbf5f;
         }
 
         .tools-bar {
@@ -393,11 +464,9 @@
         }
 
         @media (max-width: 800px) {
-            .player-card { width: 220px; min-width: 200px; }
+            .player-card { width: 280px; min-width: 260px; }
             .score-value { font-size: 1.8rem; }
-            .q-btn { padding: 3px 6px; min-width: 38px; font-size: 0.65rem; }
-            .final-score-item { padding: 0.3rem 0.8rem; }
-            .final-player-score { font-size: 0.9rem; }
+            .q-btn { padding: 3px 6px; min-width: 40px; font-size: 0.65rem; }
         }
     </style>
 </head>
@@ -405,7 +474,8 @@
 <div class="app-container">
     <div class="header">
         <h1>🃏 SKOR REMI PRO 🃏</h1>
-        <p>+5 s/d +100 & minus | Hasil Akhir (Nama + Skor) di Bawah Riwayat</p>
+        <p>✨ +35, -35, +85, -85 = WARNA KUNING ✨ | Skor terendah MERAH, lainnya HIJAU</p>
+        <p style="font-size:0.7rem;">📊 Setiap pemain: Rekor terkecil pribadi + Jumlah Kekalahan (berapa kali mencapai rekor terendah baru)</p>
     </div>
 
     <div class="add-panel">
@@ -421,12 +491,9 @@
         <button class="btn-primary" id="sampleBtn" style="background:#3a5f7c;">♠️ Contoh</button>
     </div>
 
-    <!-- Daftar Pemain (Horizontal) dengan kontrol skor -->
     <div id="playersContainer" class="players-horizontal"></div>
 
-    <!-- SECTION Gabungan: RIWAYAT + HASIL AKHIR (di bawah riwayat) -->
     <div class="history-final-section">
-        <!-- Bagian Riwayat -->
         <div class="history-container">
             <h3>📋 RIWAYAT SKOR</h3>
             <div id="historyLogContainer" class="history-log">
@@ -434,11 +501,9 @@
             </div>
         </div>
 
-        <!-- Bagian HASIL AKHIR (hanya NAMA + SKOR terakhir) di bawah riwayat -->
         <div class="final-result-container">
             <h3>🏆 HASIL AKHIR (SKOR TERKINI)</h3>
             <div id="finalScoresContainer" class="final-scores-grid">
-                <!-- Akan diisi dynamic: nama dan skor semua pemain -->
                 <div class="empty-log" style="padding:0.5rem;">Belum ada pemain</div>
             </div>
         </div>
@@ -452,8 +517,10 @@
 
 <script>
     // ================= DATA =================
-    let players = [];       // { id, name, score, lastDelta }
-    let globalHistory = []; // { playerName, delta, newScore, timestamp }
+    // players: { id, name, score, lastDelta, minRecord, lossCount }
+    // lossCount: jumlah kali pemain mencapai rekor terendah baru (kekalahan baru)
+    let players = [];
+    let globalHistory = [];
 
     function generateId() {
         return Date.now() + '-' + Math.random().toString(36).substr(2, 8);
@@ -474,6 +541,8 @@
                     players.forEach(p => {
                         if (!p.id) p.id = generateId();
                         if (p.lastDelta === undefined) p.lastDelta = 0;
+                        if (p.minRecord === undefined) p.minRecord = p.score;
+                        if (p.lossCount === undefined) p.lossCount = 0;
                     });
                 }
                 if (parsed.history && Array.isArray(parsed.history)) globalHistory = parsed.history;
@@ -481,7 +550,27 @@
             } catch(e) {}
         }
         if (!players) players = [];
-        players.forEach(p => { if (p.lastDelta === undefined) p.lastDelta = 0; });
+        players.forEach(p => { 
+            if (p.lastDelta === undefined) p.lastDelta = 0;
+            if (p.minRecord === undefined) p.minRecord = p.score;
+            if (p.lossCount === undefined) p.lossCount = 0;
+        });
+    }
+
+    // Update rekor minimal dan jumlah kekalahan (lossCount)
+    // Kekalahan dihitung setiap kali skor mencapai rekor terendah baru
+    function updateMinRecordAndLoss(playerId, newScore) {
+        const idx = players.findIndex(p => p.id === playerId);
+        if (idx !== -1) {
+            const currentMin = players[idx].minRecord;
+            if (currentMin === undefined || newScore < currentMin) {
+                players[idx].minRecord = newScore;
+                // Tambah hitungan kekalahan (karena mencapai titik terendah baru)
+                players[idx].lossCount = (players[idx].lossCount || 0) + 1;
+                return true; // rekor baru
+            }
+        }
+        return false;
     }
 
     function addHistoryAndUpdateDelta(playerId, playerName, delta, newScore) {
@@ -489,10 +578,15 @@
         globalHistory.unshift({ playerName, delta, newScore, timestamp });
         if (globalHistory.length > 150) globalHistory.pop();
         const idx = players.findIndex(p => p.id === playerId);
-        if (idx !== -1) players[idx].lastDelta = delta;
+        if (idx !== -1) {
+            players[idx].lastDelta = delta;
+            const isNewRecord = updateMinRecordAndLoss(playerId, newScore);
+            // Jika rekor baru, bisa tambahkan catatan di history? tidak wajib, cukup update lossCount
+        }
         saveToLocalStorage();
         renderHistoryPanel();
-        renderFinalScores();   // update hasil akhir setiap ada perubahan skor
+        renderFinalScores();
+        renderPlayersGrid();
     }
 
     function renderHistoryPanel() {
@@ -524,7 +618,15 @@
         }
     }
 
-    // Render HASIL AKHIR (nama + skor semua pemain) di bawah riwayat
+    function getMinScoreAmongAll() {
+        if (players.length === 0) return null;
+        let min = players[0].score;
+        for (let i = 1; i < players.length; i++) {
+            if (players[i].score < min) min = players[i].score;
+        }
+        return min;
+    }
+
     function renderFinalScores() {
         const container = document.getElementById('finalScoresContainer');
         if (!container) return;
@@ -532,15 +634,24 @@
             container.innerHTML = `<div class="empty-log" style="padding:0.5rem;">Belum ada pemain</div>`;
             return;
         }
+        
+        const minScoreOverall = getMinScoreAmongAll();
+        
         container.innerHTML = '';
-        // Urutkan berdasarkan nama atau skor? biarkan urutan pemain existing
         players.forEach(player => {
             const scoreItem = document.createElement('div');
             scoreItem.className = 'final-score-item';
-            scoreItem.innerHTML = `
-                <span class="final-player-name">${escapeHtml(player.name)}</span>
-                <span class="final-player-score">${player.score}</span>
-            `;
+            
+            const scoreSpan = document.createElement('span');
+            scoreSpan.className = 'final-player-score';
+            scoreSpan.textContent = player.score;
+            
+            if (minScoreOverall !== null && player.score === minScoreOverall) {
+                scoreSpan.classList.add('min-score');
+            }
+            
+            scoreItem.innerHTML = `<span class="final-player-name">${escapeHtml(player.name)}</span>`;
+            scoreItem.appendChild(scoreSpan);
             container.appendChild(scoreItem);
         });
     }
@@ -551,7 +662,7 @@
         const newScore = players[idx].score + deltaValue;
         players[idx].score = newScore;
         addHistoryAndUpdateDelta(playerId, players[idx].name, deltaValue, newScore);
-        renderPlayersGrid(); // refresh kartu (last change update)
+        renderPlayersGrid();
     }
 
     function resetPlayerScoreToZero(playerId) {
@@ -570,7 +681,7 @@
         if (confirm(`Hapus pemain "${player.name}"?`)) {
             players = players.filter(p => p.id !== playerId);
             renderPlayersGrid();
-            renderFinalScores();   // update hasil akhir setelah hapus
+            renderFinalScores();
             saveToLocalStorage();
         }
     }
@@ -579,17 +690,19 @@
         const trimmed = name.trim();
         if (trimmed === "") { alert("Nama tidak boleh kosong!"); return false; }
         const newId = generateId();
+        const initial = Number(initialScore) || 0;
         const newPlayer = {
             id: newId,
             name: trimmed,
-            score: Number(initialScore) || 0,
-            lastDelta: 0
+            score: initial,
+            lastDelta: 0,
+            minRecord: initial,
+            lossCount: 0
         };
         players.push(newPlayer);
-        if (newPlayer.score !== 0) {
-            addHistoryAndUpdateDelta(newId, trimmed, newPlayer.score, newPlayer.score);
+        if (initial !== 0) {
+            addHistoryAndUpdateDelta(newId, trimmed, initial, initial);
         } else {
-            // tetap render ulang
             renderPlayersGrid();
             renderFinalScores();
             saveToLocalStorage();
@@ -614,18 +727,18 @@
 
     function clearHistoryOnly() {
         if (globalHistory.length === 0) return;
-        if (confirm("Hapus semua riwayat? Skor pemain tetap ada.")) {
+        if (confirm("Hapus semua riwayat? Skor pemain & statistik kekalahan tetap ada.")) {
             globalHistory = [];
             saveToLocalStorage();
             renderHistoryPanel();
         }
     }
 
-    // Kelipatan 5 s/d 100
     const quickValues = [];
     for (let i = 5; i <= 100; i += 5) quickValues.push(i);
+    // Angka khusus yang warnanya kuning: 35 dan 85
+    const specialNumbers = [35, 85];
 
-    // Render semua kartu pemain (horizontal)
     function renderPlayersGrid() {
         const container = document.getElementById('playersContainer');
         if (!container) return;
@@ -639,7 +752,6 @@
             const card = document.createElement('div');
             card.className = 'player-card';
 
-            // Header: Nama + tombol hapus/reset
             const header = document.createElement('div');
             header.className = 'player-header';
             header.innerHTML = `
@@ -650,7 +762,6 @@
                 </div>
             `;
 
-            // Area skor utama
             const scoreArea = document.createElement('div');
             scoreArea.className = 'score-main';
             scoreArea.innerHTML = `
@@ -658,35 +769,36 @@
                 <div class="score-label">SKOR</div>
             `;
 
-            // Tombol cepat + dan -
             const plusContainer = document.createElement('div');
             plusContainer.className = 'quick-buttons';
             const minusContainer = document.createElement('div');
             minusContainer.className = 'quick-buttons';
             
             quickValues.forEach(val => {
-                const btn = document.createElement('button');
-                btn.innerText = `+${val}`;
-                btn.className = 'q-btn plus';
-                btn.addEventListener('click', (e) => {
+                const isSpecial = specialNumbers.includes(val);
+                // Tombol PLUS
+                const btnPlus = document.createElement('button');
+                btnPlus.innerText = `+${val}`;
+                btnPlus.className = 'q-btn plus';
+                if (isSpecial) btnPlus.classList.add('special-plus');
+                btnPlus.addEventListener('click', (e) => {
                     e.stopPropagation();
                     updatePlayerScore(player.id, val);
                 });
-                plusContainer.appendChild(btn);
-            });
-            
-            quickValues.forEach(val => {
-                const btn = document.createElement('button');
-                btn.innerText = `-${val}`;
-                btn.className = 'q-btn minus';
-                btn.addEventListener('click', (e) => {
+                plusContainer.appendChild(btnPlus);
+                
+                // Tombol MINUS
+                const btnMinus = document.createElement('button');
+                btnMinus.innerText = `-${val}`;
+                btnMinus.className = 'q-btn minus';
+                if (isSpecial) btnMinus.classList.add('special-minus');
+                btnMinus.addEventListener('click', (e) => {
                     e.stopPropagation();
                     updatePlayerScore(player.id, -val);
                 });
-                minusContainer.appendChild(btn);
+                minusContainer.appendChild(btnMinus);
             });
 
-            // Custom input
             const customDiv = document.createElement('div');
             customDiv.className = 'custom-control';
             const customInput = document.createElement('input');
@@ -710,7 +822,24 @@
             customDiv.appendChild(customInput);
             customDiv.appendChild(customBtn);
 
-            // Perubahan terakhir (last delta)
+            // STATISTIK KEKALAHAN (Loss Count)
+            const lossCountValue = player.lossCount || 0;
+            const statsDiv = document.createElement('div');
+            statsDiv.className = 'stats-container';
+            statsDiv.innerHTML = `
+                <div class="stats-title">📉 JUMLAH KEKALAHAN (Rekor Terendah Baru)</div>
+                <div class="stats-badge">😫 Kalah ${lossCountValue} kali</div>
+            `;
+
+            // REKOR TERKECIL PRIBADI
+            const minRecordValue = (player.minRecord !== undefined && player.minRecord !== null) ? player.minRecord : player.score;
+            const recordDiv = document.createElement('div');
+            recordDiv.className = 'record-container';
+            recordDiv.innerHTML = `
+                <div class="record-title">🏆 REKOR TERKECIL PERNAH</div>
+                <div class="record-badge">${minRecordValue}</div>
+            `;
+
             const lastDelta = player.lastDelta !== undefined ? player.lastDelta : 0;
             let deltaDisplay = '';
             let deltaClass = 'neutral';
@@ -737,11 +866,12 @@
             card.appendChild(plusContainer);
             card.appendChild(minusContainer);
             card.appendChild(customDiv);
+            card.appendChild(statsDiv);
+            card.appendChild(recordDiv);
             card.appendChild(lastChangeDiv);
             container.appendChild(card);
         }
 
-        // Event untuk tombol hapus & reset
         document.querySelectorAll('.icon-btn.delete').forEach(btn => {
             btn.removeEventListener('click', window._delHandler);
             const handler = (e) => {
@@ -789,7 +919,6 @@
         }
     }
 
-    // Inisialisasi
     document.addEventListener('DOMContentLoaded', () => {
         loadFromLocalStorage();
         renderPlayersGrid();
