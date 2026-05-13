@@ -270,14 +270,6 @@
             background: #2a2a3a;
             color: #ffaa88;
         }
-        .loss-count {
-            background: #5a1a1a;
-            color: #ffaaaa;
-            margin-left: 5px;
-            padding: 2px 8px;
-            border-radius: 1rem;
-            font-size: 0.7rem;
-        }
 
         .record-container {
             margin-top: 6px;
@@ -474,8 +466,6 @@
 <div class="app-container">
     <div class="header">
         <h1>🃏 SKOR REMI PRO 🃏</h1>
-        <p>✨ +35, -35, +85, -85 = WARNA KUNING ✨ | Skor terendah MERAH, lainnya HIJAU</p>
-        <p style="font-size:0.7rem;">📊 Setiap pemain: Rekor terkecil pribadi + Jumlah Kekalahan (berapa kali mencapai rekor terendah baru)</p>
     </div>
 
     <div class="add-panel">
@@ -565,9 +555,8 @@
             const currentMin = players[idx].minRecord;
             if (currentMin === undefined || newScore < currentMin) {
                 players[idx].minRecord = newScore;
-                // Tambah hitungan kekalahan (karena mencapai titik terendah baru)
                 players[idx].lossCount = (players[idx].lossCount || 0) + 1;
-                return true; // rekor baru
+                return true;
             }
         }
         return false;
@@ -580,8 +569,7 @@
         const idx = players.findIndex(p => p.id === playerId);
         if (idx !== -1) {
             players[idx].lastDelta = delta;
-            const isNewRecord = updateMinRecordAndLoss(playerId, newScore);
-            // Jika rekor baru, bisa tambahkan catatan di history? tidak wajib, cukup update lossCount
+            updateMinRecordAndLoss(playerId, newScore);
         }
         saveToLocalStorage();
         renderHistoryPanel();
@@ -805,19 +793,16 @@
             customInput.type = 'number';
             customInput.placeholder = 'custom';
             customInput.value = '0';
-            customInput.step = '5';
+            customInput.step = 'any';
             const customBtn = document.createElement('button');
             customBtn.innerText = 'Ubah';
             customBtn.className = 'small-btn';
             customBtn.addEventListener('click', () => {
                 let val = Number(customInput.value);
                 if (isNaN(val)) val = 0;
-                if (val !== 0) {
-                    updatePlayerScore(player.id, val);
-                    customInput.value = '0';
-                } else {
-                    alert("Masukkan nilai bukan 0 (cth: 25, -15)");
-                }
+                // NILAI 0 DIIZINKAN DAN AKAN MASUK RIWAYAT
+                updatePlayerScore(player.id, val);
+                customInput.value = '0';
             });
             customDiv.appendChild(customInput);
             customDiv.appendChild(customBtn);
@@ -850,7 +835,7 @@
                 deltaDisplay = `${lastDelta}`;
                 deltaClass = 'negative';
             } else {
-                deltaDisplay = '0 (belum ada)';
+                deltaDisplay = '0';
                 deltaClass = 'neutral';
             }
             
